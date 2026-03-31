@@ -1,0 +1,29 @@
+name: "chest-xray-processing"
+version: "1.0"
+input: "data/raw/chest_xray_lungs"
+output: "data/processed/chest_xray"
+batch_size: 32
+
+reader:
+  type: "pipeline.readers.chest_xray_reader.ChestXRayReader"
+  config:
+    metadata_file: "MetaData_subset.csv"
+    key_column: "id"
+
+transformers:
+  - type: "pipeline.transformers.chest_xray_transformer.ChestXRayTransformer"
+    config: {}
+  - type: "pipeline.transformers.label_field_mapper.LabelFieldMapper"
+    config:
+      field_mappings:
+        sex:
+          male: "male"
+          female: "female"
+          M: "male"
+          F: "female"
+
+writer:
+  type: "pipeline.writers.standard_dataset_writer.StandardDatasetWriter"
+  config:
+    version: "1.0"
+    copy_images: true

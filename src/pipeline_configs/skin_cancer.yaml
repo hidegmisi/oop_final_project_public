@@ -1,0 +1,29 @@
+name: "skin-cancer-processing"
+version: "1.0"
+input: "data/raw/skin_cancer"
+output: "data/processed/skin_cancer"
+batch_size: 32
+
+reader:
+  type: "pipeline.readers.skin_cancer_reader.SkinCancerReader"
+  config:
+    metadata_file: "HAM10000_metadata_subset.csv"
+    key_column: "image_id"
+
+transformers:
+  - type: "pipeline.transformers.skin_cancer_transformer.SkinCancerTransformer"
+    config: {}
+  - type: "pipeline.transformers.label_field_mapper.LabelFieldMapper"
+    config:
+      field_mappings:
+        sex:
+          male: "male"
+          female: "female"
+          M: "male"
+          F: "female"
+
+writer:
+  type: "pipeline.writers.standard_dataset_writer.StandardDatasetWriter"
+  config:
+    version: "1.0"
+    copy_images: true

@@ -1,0 +1,107 @@
+# Data & credentials
+data/
+kaggle.json
+
+# Python
+__pycache__/
+*.py[codz]
+*$py.class
+*.so
+
+# Build & packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Testing & coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py.cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Translations
+*.mo
+*.pot
+
+# Logs
+*.log
+
+# Docs build
+docs/_build/
+
+# Notebooks
+.ipynb_checkpoints
+
+# Environments
+.env
+.envrc
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Type checkers
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+
+# Tools
+.ruff_cache/
+.pybuilder/
+.pdm-python
+.pdm-build/
+.pixi
+.abstra/
+.ropeproject
+.spyderproject
+.spyproject
+cython_debug/
+target/
+/site
+__pypackages__/
+profile_default/
+ipython_config.py
+celerybeat-schedule
+celerybeat.pid
+*.sage.py
+
+# Editor
+.cursorignore
+.cursorindexingignore
+
+# PyPI
+.pypirc

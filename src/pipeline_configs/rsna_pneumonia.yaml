@@ -1,0 +1,31 @@
+name: "rsna-pneumonia-processing"
+version: "1.0"
+input: "data/raw/rsna_pneumonia"
+output: "data/processed/rsna_pneumonia"
+batch_size: 32
+
+reader:
+  type: "pipeline.readers.rsna_pneumonia_reader.RSNAPneumoniaReader"
+  config:
+    metadata_files:
+      - "stage2_train_metadata_subset.csv"
+      - "stage2_test_metadata_subset.csv"
+    key_column: "patientId"
+
+transformers:
+  - type: "pipeline.transformers.rsna_pneumonia_transformer.RSNAPneumoniaTransformer"
+    config: {}
+  - type: "pipeline.transformers.label_field_mapper.LabelFieldMapper"
+    config:
+      field_mappings:
+        sex:
+          M: "male"
+          F: "female"
+          Male: "male"
+          Female: "female"
+
+writer:
+  type: "pipeline.writers.standard_dataset_writer.StandardDatasetWriter"
+  config:
+    version: "1.0"
+    copy_images: true
