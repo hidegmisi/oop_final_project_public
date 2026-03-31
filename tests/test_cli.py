@@ -1,5 +1,3 @@
-import os
-
 import pytest
 from typer.testing import CliRunner
 
@@ -17,14 +15,11 @@ def test_pipeline_help_lists_commands() -> None:
     assert "clean-data" in out
 
 
-def test_pipeline_run_help_shows_options() -> None:
-    # Rich wraps help to terminal width; CI often uses a narrow default, which
-    # splits "--data-root" across lines and breaks substring assertions.
-    result = runner.invoke(
-        app,
-        ["run", "--help"],
-        env={**os.environ, "COLUMNS": "120"},
-    )
+def test_pipeline_run_help_shows_options(monkeypatch: pytest.MonkeyPatch) -> None:
+    # Typer sets rich_utils.MAX_WIDTH from $TERMINAL_WIDTH at import time; CliRunner
+    # also forces a narrow width. Patch a wide console so flags stay on one line.
+    monkeypatch.setattr("typer.rich_utils.MAX_WIDTH", 120)
+    result = runner.invoke(app, ["run", "--help"])
     assert result.exit_code == 0
     out = result.stdout
     assert "--data-root" in out
