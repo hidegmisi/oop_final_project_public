@@ -1,4 +1,6 @@
+import click
 import pytest
+from typer.main import get_command
 from typer.testing import CliRunner
 
 from cli import app
@@ -15,17 +17,22 @@ def test_pipeline_help_lists_commands() -> None:
     assert "clean-data" in out
 
 
-def test_pipeline_run_help_shows_options(monkeypatch: pytest.MonkeyPatch) -> None:
-    # Typer sets rich_utils.MAX_WIDTH from $TERMINAL_WIDTH at import time; CliRunner
-    # also forces a narrow width. Patch a wide console so flags stay on one line.
-    monkeypatch.setattr("typer.rich_utils.MAX_WIDTH", 120)
-    result = runner.invoke(app, ["run", "--help"])
-    assert result.exit_code == 0
-    out = result.stdout
-    assert "--data-root" in out
-    assert "--limit" in out
-    assert "--log-every" in out
-    assert "--batch-size" in out
+def test_pipeline_run_defines_expected_options() -> None:
+    """Assert option flags on the Click command — Rich help output is not stable in CI."""
+    group = get_command(app)
+    ctx = click.Context(group)
+    run_cmd = group.get_command(ctx, "run")
+    assert run_cmd is not None
+    opts = [
+        name
+        for p in run_cmd.params
+        if isinstance(p, click.Option)
+        for name in p.opts
+    ]
+    assert "--data-root" in opts
+    assert "--limit" in opts
+    assert "--log-every" in opts
+    assert "--batch-size" in opts
 
 
 def test_pipeline_download_invokes_run_download(
